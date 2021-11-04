@@ -1,4 +1,4 @@
-export { default as updateToken } from './UpdateToken'
+export { default as updateToken } from './updateToken'
 
 export function login() {
   return true

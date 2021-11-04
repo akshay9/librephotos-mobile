@@ -8,7 +8,7 @@
     "start": "react-native start",
     "test": "jest",
     "lint": "eslint .",
-    "type-check": "tsc --build plugins/typescript/template/tsconfig.json",
+    "type-check": "tsc",
     "postversion": "react-native-version"
   },
   "dependencies": {
@@ -20,6 +20,7 @@
     "@react-navigation/stack": "^5.14.5",
     "@reduxjs/toolkit": "^1.6.0",
     "@thecodingmachine/redux-toolkit-wrapper": "2.0.1",
+    "@types/react-native-vector-icons": "^6.4.9",
     "axios": "^0.21.1",
     "i18next": "^20.3.2",
     "jwt-decode": "^3.1.2",
@@ -52,6 +53,12 @@
     "@babel/core": "^7.12.9",
     "@babel/runtime": "^7.12.5",
     "@react-native-community/eslint-config": "^2.0.0",
+    "@types/fbemitter": "^2.0.32",
+    "@types/jest": "^27.0.2",
+    "@types/react": "^17.0.34",
+    "@types/react-native": "^0.66.2",
+    "@types/react-redux": "^7.1.20",
+    "@types/react-test-renderer": "^17.0.1",
     "babel-jest": "^26.6.3",
     "babel-plugin-module-resolver": "^4.0.0",
     "eslint": "^7.22.0",
@@ -60,9 +67,10 @@
     "eslint-plugin-jest": "^24.3.5",
     "identity-obj-proxy": "^3.0.0",
     "jest": "^26.6.3",
-    "metro-react-native-babel-preset": "^0.64.0",
+    "metro-react-native-babel-preset": "^0.66.0",
     "react-native-version": "^4.0.0",
-    "react-test-renderer": "17.0.1"
+    "react-test-renderer": "17.0.1",
+    "typescript": "^4.4.4"
   },
   "jest": {
     "preset": "react-native",

@@ -17,6 +17,7 @@ import {
 } from 'react-native-device-info'
 import { FileLogger } from 'react-native-file-logger'
 import RNShake from 'react-native-shake'
+import { updateToken } from '@/Services/Auth'
 
 const Stack = createStackNavigator()
 
@@ -79,6 +80,12 @@ const ApplicationNavigator = () => {
       appStateChangeEvt.remove()
     }
   }, [])
+
+  useEffect(() => {
+    if (appState === 'active') {
+      updateToken()
+    }
+  }, [appState])
 
   // on destroy needed to be able to reset when app close in background (Android)
   useEffect(

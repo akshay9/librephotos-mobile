@@ -11,7 +11,7 @@ import { OptionMultiSelect } from './OptionMultiSelect'
 import { OptionButton } from './OptionButton'
 import LogoutUser from '@/Store/Auth/LogoutUser'
 import { version } from '../../../package.json'
-import UpdateToken from '../../Services/Auth/UpdateToken'
+import UpdateToken from '../../Services/Auth/updateToken'
 import ConfigureLogging from '../../Store/Config/ConfigureLogging'
 import { OptionToggle } from './OptionToggle'
 

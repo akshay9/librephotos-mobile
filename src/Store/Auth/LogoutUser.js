@@ -7,7 +7,7 @@ export default {
     isLoggedin: false,
   },
   action: createAction('auth/logoutUser'),
-  reducers(state, { payload }) {
+  reducers(state) {
     state.isLoggedin = false
     state.access = {}
     state.refresh = {}
