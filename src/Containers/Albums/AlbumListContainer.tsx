@@ -1,34 +1,44 @@
 import React from 'react'
 import { useSelector } from 'react-redux'
-import { View, FlatList } from 'react-native'
+import { View, FlatList, ListRenderItem } from 'react-native'
 import { Box, Pressable, Image, Text } from 'native-base'
 import { useNavigation } from '@react-navigation/native'
 import { useTheme } from '@/Theme'
 import { TopBar } from '@/Components'
 import { updateToken } from '@/Services/Auth'
+import { AuthState } from '@/Store/Auth'
+import { AlbumType } from '@/Components/PreviewTile'
+import { ImageType } from '@/Components/ImageGrid'
+import AlbumServices from '@/Services/Albums'
+
+export interface AlbumListItemType extends AlbumType {
+  photos?: ((album: AlbumType) => void) | ImageType[]
+}
 
 const AlbumListContainer = ({
   route: {
-    params: { title = 'Albums', albums = [], photos = () => null },
+    params: { title = 'Albums', albums = [] as AlbumType[], photoService = '' },
   },
 }) => {
   const { Common, Colors, Gutters, Layout } = useTheme()
-  const navigation = useNavigation()
-  const authToken = useSelector(state => state.auth.access.token)
+  const navigation = useNavigation<any>()
+  const authToken = useSelector(
+    (state: { auth: AuthState }) => state.auth.access.token,
+  )
 
-  const handleItemPress = (item, index) => {
-    photos(item)
+  const handleItemPress = (item: AlbumType, index: number) => {
     navigation.push('PhotoList', {
       title: albums[index].title,
     })
+    AlbumServices[photoService](item, index)
   }
 
-  const renderItem = ({ item, index, section }) => {
+  const renderItem: ListRenderItem<AlbumType> = ({ item, index }) => {
     return (
       <Pressable
         key={index}
         style={[Common.timeline.photoItem]}
-        onPress={() => handleItemPress(item, index, section)}
+        onPress={() => handleItemPress(item, index)}
       >
         <View style={[Layout.center]}>
           <Box

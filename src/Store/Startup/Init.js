@@ -5,7 +5,7 @@ import {
 } from '@thecodingmachine/redux-toolkit-wrapper'
 import { store } from '@/Store'
 import { navigateAndSimpleReset } from '@/Navigators/Root'
-import DefaultTheme from '@/Store/Theme/DefaultTheme'
+import { setDefaultTheme } from '../Theme'
 
 export default {
   initialState: buildAsyncState(),
@@ -17,7 +17,7 @@ export default {
       // await new Promise(resolve => setTimeout(resolve, 1000))
       await Promise.all([
         new Promise(resolve => setTimeout(resolve, 500)),
-        dispatch(DefaultTheme.action({ theme: 'default', darkMode: null })),
+        dispatch(setDefaultTheme({ theme: 'default', darkMode: null })),
       ])
       // Navigate and reset to the main navigator
       if (store.getState().auth.isLoggedin) {

@@ -5,15 +5,14 @@ import { useTheme } from '@/Theme'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigation } from '@react-navigation/core'
 import { TopBar } from '@/Components'
-import ChangeTheme from '@/Store/Theme/ChangeTheme'
 import { SettingSubHeader } from './SettingSubHeader'
 import { OptionMultiSelect } from './OptionMultiSelect'
 import { OptionButton } from './OptionButton'
-import LogoutUser from '@/Store/Auth/LogoutUser'
 import { version } from '../../../package.json'
 import UpdateToken from '../../Services/Auth/updateToken'
-import ConfigureLogging from '../../Store/Config/ConfigureLogging'
 import { OptionToggle } from './OptionToggle'
+import { logoutUser } from '@/Store/Auth'
+import { changeTheme } from '@/Store/Theme'
 
 const SettingsContainer = () => {
   const { Colors, Layout, Gutters } = useTheme()
@@ -34,16 +33,16 @@ const SettingsContainer = () => {
     }
   }
 
-  const changeTheme = themeName => {
+  const handleChangeTheme = themeName => {
     switch (themeName) {
       case 'System Default':
-        dispatch(ChangeTheme.action({ darkMode: null }))
+        dispatch(changeTheme({ darkMode: null }))
         break
       case 'Light':
-        dispatch(ChangeTheme.action({ darkMode: false }))
+        dispatch(changeTheme({ darkMode: false }))
         break
       case 'Dark':
-        dispatch(ChangeTheme.action({ darkMode: true }))
+        dispatch(changeTheme({ darkMode: true }))
         break
     }
   }
@@ -56,16 +55,16 @@ const SettingsContainer = () => {
 
   const configureLogging = () => {
     if (logging) {
-      dispatch(ConfigureLogging.action({ logging: false }))
+      dispatch(configureLogging({ logging: false }))
       toast.show({ title: 'Logging Disabled.', duration: 1500 })
     } else {
-      dispatch(ConfigureLogging.action({ logging: true }))
+      dispatch(configureLogging({ logging: true }))
       toast.show({ title: 'Logging Enabled.', duration: 1500 })
     }
   }
 
   const logout = () => {
-    dispatch(LogoutUser.action())
+    dispatch(logoutUser())
     navigation.navigate('Login')
   }
 
@@ -87,7 +86,7 @@ const SettingsContainer = () => {
               title="Dark Mode"
               subTitle={mapTheme(theme)}
               options={['System Default', 'Light', 'Dark']}
-              onSelect={option => changeTheme(option)}
+              onSelect={option => handleChangeTheme(option)}
             />
             <OptionButton
               title="Logout"

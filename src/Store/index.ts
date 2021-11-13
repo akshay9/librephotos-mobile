@@ -19,9 +19,7 @@ import api from '@/Services/index'
 import auth, { AuthState } from './Auth'
 import album from './Album'
 import config from './Config'
-import photos from './Photos'
 import gallery from './Gallery'
-import gallerylist from './GalleryList'
 import startup from './Startup'
 import search from './Search'
 import theme from './Theme'
@@ -30,9 +28,7 @@ const reducers = combineReducers({
   auth,
   album,
   config,
-  photos,
   gallery,
-  gallerylist,
   startup,
   search,
   theme,
@@ -50,7 +46,7 @@ const rootReducer: Reducer = (state: RootState, action: AnyAction) => {
 const persistConfig = {
   key: 'root',
   storage: AsyncStorage,
-  whitelist: ['auth', 'config', 'gallery', 'theme'],
+  whitelist: ['album', 'auth', 'config', 'gallery', 'theme'],
 }
 
 const persistedReducer = persistReducer(persistConfig, rootReducer)

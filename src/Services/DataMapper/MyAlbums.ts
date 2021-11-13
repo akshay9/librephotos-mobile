@@ -1,3 +1,4 @@
+import { AlbumType } from '@/Components/PreviewTile'
 import { store } from '@/Store/index'
 import { getConfigFromState } from '../Config'
 
@@ -30,13 +31,13 @@ export const myAlbumMapper = (myAlbumResult: SourceMyAlbumType[]) => {
 
   let finalmap = myAlbumResult.map(item => {
     return {
-      id: item.id,
+      id: item.id + '',
       title: item.title,
       url:
         getConfigFromState(store.getState()).MEDIA_URL +
         '/square_thumbnails/' +
         item.cover_photos[0].image_hash,
-    }
+    } as AlbumType
   })
 
   return finalmap

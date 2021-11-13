@@ -22,7 +22,7 @@ export const albumPeopleMapper = (
 
   let finalmap = albumPeopleResult.map(item => {
     return {
-      id: item.id,
+      id: item.id + '',
       title: item.name,
       url:
         extractBaseUrl(store.getState()) +

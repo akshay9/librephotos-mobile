@@ -1,6 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit'
 import jwtDecode from 'jwt-decode'
-import LogoutUser from './LogoutUser'
 
 const slice = createSlice({
   name: 'auth',
@@ -27,7 +26,11 @@ const slice = createSlice({
 
       state.isLoggedin = true
     },
-    logoutUser: LogoutUser.reducers,
+    logoutUser: state => {
+      state.isLoggedin = false
+      state.access = {}
+      state.refresh = {}
+    },
   },
 })
 

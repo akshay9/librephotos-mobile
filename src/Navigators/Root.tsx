@@ -5,11 +5,11 @@
  * You can add other navigation functions that you need and export them
  */
 import * as React from 'react'
-import { CommonActions } from '@react-navigation/native'
+import { CommonActions, NavigationContainerRef } from '@react-navigation/native'
 
-export const navigationRef = React.createRef()
+export const navigationRef = React.createRef<NavigationContainerRef>()
 
-export function navigate(name, params) {
+export function navigate(name: string, params: any) {
   navigationRef.current?.navigate(name, params)
 }
 
@@ -22,7 +22,7 @@ export function navigateAndReset(routes = [], index = 0) {
   )
 }
 
-export function navigateAndSimpleReset(name, index = 0) {
+export function navigateAndSimpleReset(name: string, index = 0) {
   navigationRef.current?.dispatch(
     CommonActions.reset({
       index,

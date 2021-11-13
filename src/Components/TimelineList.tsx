@@ -19,8 +19,8 @@ export interface TimelineListItemType extends SectionListData<ImageType> {
 
 type Props = {
   data: TimelineListItemType[]
-  onRefresh: () => void
-  refreshing: boolean
+  onRefresh?: () => void
+  refreshing?: boolean
 }
 
 const TimelineList = ({
@@ -92,8 +92,9 @@ const TimelineList = ({
   )
 }
 
-// TimelineList.defaultProps = {
-//   data: [],
-// }
+TimelineList.defaultProps = {
+  onRefresh: () => {},
+  refreshing: false,
+}
 
 export default TimelineList

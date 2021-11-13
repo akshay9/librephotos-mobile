@@ -4,22 +4,25 @@ import TimelineList from '../../Components/TimelineList'
 import { TopBar } from '../../Components'
 import ImageGrid from '../../Components/ImageGrid'
 import LoadingSpinner from '../../Components/LoadingSpinner'
+import { AlbumState } from '@/Store/Album'
 
 const PhotoListContainer = ({
   route: {
     params: { title = 'Albums' },
   },
 }) => {
-  const gallerylist = useSelector(state => state.gallerylist)
+  const photoViewData = useSelector(
+    (state: { album: AlbumState }) => state.album.photoViewData,
+  )
 
   return (
     <>
       <TopBar title={title} showBack={true} />
-      {!gallerylist.loading ? (
-        gallerylist.lastLoaded === 'timeline' ? (
-          <TimelineList data={gallerylist.timelinePhotos} />
+      {!photoViewData.loading ? (
+        photoViewData.dataType === 'timeline' ? (
+          <TimelineList data={photoViewData.data} />
         ) : (
-          <ImageGrid data={gallerylist.gridPhotos} displayError={true} />
+          <ImageGrid data={photoViewData.data} displayError={true} />
         )
       ) : (
         <LoadingSpinner />

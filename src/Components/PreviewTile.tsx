@@ -7,9 +7,10 @@ import { useTheme } from '@/Theme'
 import { useNavigation } from '@react-navigation/native'
 import { updateToken } from '../Services/Auth'
 import { AuthState } from '@/Store/Auth'
+import AlbumServices from '../Services/Albums'
 
 export type AlbumType = {
-  id?: number
+  id: string
   url: string
   title: string
 }
@@ -18,8 +19,8 @@ type Props = {
   icon: string
   heading: string
   subHeading: string
-  albums: Array<AlbumType>
-  photos: any
+  albums: AlbumType[]
+  photoService: string
   iconSuffix?: string
 }
 
@@ -28,7 +29,7 @@ const PreviewTile = ({
   heading,
   subHeading,
   albums,
-  photos,
+  photoService = '',
   iconSuffix = '',
 }: Props) => {
   const { Colors, Layout, Common, Gutters } = useTheme()
@@ -37,11 +38,11 @@ const PreviewTile = ({
     (state: { auth: AuthState }) => state.auth.access.token,
   )
 
-  const handleItemPress = (item: AlbumType, _index: number) => {
-    photos(item)
+  const handleItemPress = (item: AlbumType, index: number) => {
     navigation.push('PhotoList', {
       title: item.title,
     })
+    AlbumServices[photoService](item, index)
   }
 
   const renderItem: ListRenderItem<AlbumType> = ({ item, index }) => {
@@ -93,7 +94,7 @@ const PreviewTile = ({
           navigation.push('AlbumList', {
             title: heading,
             albums: albums,
-            photos: photos,
+            photoService: photoService,
           })
         }}
       >
