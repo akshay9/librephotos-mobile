@@ -17,10 +17,11 @@ import { useTranslation } from 'react-i18next'
 import { useTheme } from '@/Theme'
 import { Brand } from '@/Components'
 import { navigateAndSimpleReset } from '@/Navigators/Root'
-import { CheckServerService } from '../../Services/Config'
+import { CheckServerService, preprocessserver } from '../../Services/Config'
 import fetchData, { defaultResponse } from '@/Services/utils/fetchData'
 import loginUser from '@/Services/Auth/loginUser'
 import { AuthState, storeToken } from '@/Store/Auth'
+import { changeBaseURL } from '@/Store/Config'
 
 const IndexLoginContainer = () => {
   const { Colors, Layout, Gutters } = useTheme()
@@ -48,7 +49,10 @@ const IndexLoginContainer = () => {
 
   const login = (_evt: any) => {
     fetchData(loginUser(server, username, password), setLoginResponse).then(
-      data => dispatch(storeToken(data)),
+      data => {
+        dispatch(storeToken(data))
+        dispatch(changeBaseURL({ baseurl: preprocessserver(server) }))
+      },
     )
   }
 

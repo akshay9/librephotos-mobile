@@ -1,8 +1,7 @@
 import { AxiosResponse } from 'axios'
-import React from 'hoist-non-react-statics/node_modules/@types/react'
 
 export const defaultResponse = {
-  loading: true,
+  loading: false,
   data: null,
   error: null,
 } as ResponseType
@@ -11,7 +10,7 @@ export default function (
   promise: Promise<any>,
   setData: React.Dispatch<React.SetStateAction<ResponseType>>,
 ) {
-  let response = { ...defaultResponse }
+  let response = { ...defaultResponse, ...{ loading: true } }
   setData(response)
 
   return promise
@@ -19,7 +18,7 @@ export default function (
       response.loading = false
       response.data = res.data
 
-      setData(response)
+      setData({ ...response })
       return res.data
     })
     .catch(error => {
@@ -27,7 +26,7 @@ export default function (
       response.loading = false
       response.error = error
 
-      setData(response)
+      setData({ ...response })
 
       // throw error
     })

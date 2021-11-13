@@ -65,8 +65,8 @@ instance.interceptors.response.use(
 
 instance.interceptors.response.use(
   response => response,
-  ({ message, response: { data, status } }) => {
-    return handleError({ message, data, status })
+  ({ config, message, response: { data, status } }) => {
+    return handleError({ config, message, data, status })
   },
 )
 

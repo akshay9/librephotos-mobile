@@ -1,3 +1,4 @@
+import { TimelineListItemType } from '@/Components/TimelineList'
 import { imageGridReducer } from './ImageGridReducer'
 
 export type SourcePhotoType = {
@@ -31,7 +32,7 @@ export const photoMapper = (photosResult: Array<SourcePhotosByDateType>) => {
       id: item.date,
       title: item.date,
       data: imageGridReducer(item.items),
-    }
+    } as TimelineListItemType
   })
 
   return finalmap

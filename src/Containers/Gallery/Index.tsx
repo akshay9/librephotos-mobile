@@ -3,15 +3,19 @@ import { useDispatch, useSelector } from 'react-redux'
 import { View } from 'react-native'
 import { Button, HStack, ScrollView } from 'native-base'
 import { useTheme } from '@/Theme'
-import FetchAlbumByDate from '@/Store/Album/FetchByDate'
-import FetchPhotosWithoutDate from '@/Store/Album/FetchPhotosWithoutDate'
-import FetchRecentlyAdded from '@/Store/Album/FetchRecentlyAdded'
-import FetchFavourites from '@/Store/Album/FetchFavourites'
-import FetchHidden from '@/Store/Album/FetchHidden'
-import FetchPublic from '@/Store/Album/FetchPublic'
 import TimelineList from '@/Components/TimelineList'
 import { TopBar } from '@/Components'
 import ImageGrid from '@/Components/ImageGrid'
+import { GalleryState } from '@/Store/Gallery'
+import {
+  FetchPhotosFavourites,
+  FetchPhotosHidden,
+  FetchPhotosPublic,
+  FetchPhotosRecentlyAdded,
+  FetchPhotosWithDate,
+  FetchPhotosWithoutDate,
+} from '@/Services/Gallery'
+import { defaultResponse, ResponseType } from '@/Services/utils/fetchData'
 
 const CategoryType = {
   PhotosByDate: 'With Timestamp',
@@ -26,17 +30,27 @@ const GalleryContainer = () => {
   const { Common, Layout } = useTheme()
   const dispatch = useDispatch()
 
-  const albums = useSelector(state => state.album)
-  const albumByDate = useSelector(state => state.album.albumByDate)
-  const albumWithoutDate = useSelector(state => state.album.albumWithoutDate)
-  const albumRecentlyAdded = useSelector(
-    state => state.album.albumRecentlyAdded,
+  const [{ loading, error }, setPageData] =
+    useState<ResponseType>(defaultResponse)
+
+  const photosByDate = useSelector(
+    (state: { gallery: GalleryState }) => state.gallery.photosWithTimestamp,
   )
-  const albumFavourites = useSelector(state => state.album.albumFavourites)
-  const albumPublic = useSelector(state => state.album.albumPublic)
-  const albumHidden = useSelector(state => state.album.albumHidden)
-  const photosByDate = albumByDate
-  const photosWithoutDate = albumWithoutDate?.results
+  const photosWithoutDate = useSelector(
+    (state: { gallery: GalleryState }) => state.gallery.photosWithoutTimestamp,
+  )
+  const photosRecentlyAdded = useSelector(
+    (state: { gallery: GalleryState }) => state.gallery.photosRecentlyAdded,
+  )
+  const photosFavourites = useSelector(
+    (state: { gallery: GalleryState }) => state.gallery.photosFavourites,
+  )
+  const photosPublic = useSelector(
+    (state: { gallery: GalleryState }) => state.gallery.photosPublic,
+  )
+  const PhotosHidden = useSelector(
+    (state: { gallery: GalleryState }) => state.gallery.photosHidden,
+  )
 
   const [category, setCategory] = useState(CategoryType.PhotosByDate)
 
@@ -44,32 +58,38 @@ const GalleryContainer = () => {
     console.log('Fetching Category: ' + category)
     switch (category) {
       case CategoryType.PhotosByDate:
-        dispatch(FetchPhotosWithoutDate.action())
+        FetchPhotosWithDate(setPageData)
         break
       case CategoryType.PhotosWithoutDate:
-        dispatch(FetchAlbumByDate.action())
+        FetchPhotosWithoutDate(setPageData)
         break
       case CategoryType.Recent:
-        dispatch(FetchRecentlyAdded.action())
+        FetchPhotosRecentlyAdded(setPageData)
         break
       case CategoryType.Favourite:
-        dispatch(FetchFavourites.action())
+        FetchPhotosFavourites(setPageData)
         break
       case CategoryType.Public:
-        dispatch(FetchPublic.action())
+        FetchPhotosPublic(setPageData)
         break
       case CategoryType.Hidden:
-        dispatch(FetchHidden.action())
+        FetchPhotosHidden(setPageData)
         break
     }
   }, [dispatch, category])
 
   useEffect(() => {
-    dispatch(FetchAlbumByDate.action())
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    FetchPhotosWithDate(setPageData)
   }, [])
 
-  const renderButton = (index, buttonCategory) => {
+  useEffect(() => {
+    // TODO: create error popup
+    if (error) {
+      console.log('Error', error)
+    }
+  }, [error])
+
+  const renderButton = (index: string, buttonCategory: string) => {
     return (
       <Button
         key={index}
@@ -89,8 +109,8 @@ const GalleryContainer = () => {
         return (
           <TimelineList
             data={photosByDate}
-            onRefresh={() => dispatch(FetchAlbumByDate.action())}
-            refreshing={albums.loading}
+            onRefresh={() => FetchPhotosWithDate(setPageData)}
+            refreshing={loading}
           />
         )
       case CategoryType.PhotosWithoutDate:
@@ -99,42 +119,42 @@ const GalleryContainer = () => {
             data={photosWithoutDate}
             numColumns={3}
             displayError={true}
-            onRefresh={() => dispatch(FetchPhotosWithoutDate.action())}
-            refreshing={albums.loading}
+            onRefresh={() => FetchPhotosWithoutDate(setPageData)}
+            refreshing={loading}
           />
         )
       case CategoryType.Recent:
         return (
           <ImageGrid
-            data={albumRecentlyAdded?.results}
+            data={photosRecentlyAdded}
             numColumns={3}
             displayError={true}
-            onRefresh={() => dispatch(FetchAlbumByDate.action())}
-            refreshing={albums.loading}
+            onRefresh={() => FetchPhotosRecentlyAdded(setPageData)}
+            refreshing={loading}
           />
         )
       case CategoryType.Favourite:
         return (
           <TimelineList
-            data={albumFavourites}
-            onRefresh={() => dispatch(FetchFavourites.action())}
-            refreshing={albums.loading}
+            data={photosFavourites}
+            onRefresh={() => FetchPhotosFavourites(setPageData)}
+            refreshing={loading}
           />
         )
       case CategoryType.Public:
         return (
           <TimelineList
-            data={albumPublic}
-            onRefresh={() => dispatch(FetchPublic.action())}
-            refreshing={albums.loading}
+            data={photosPublic}
+            onRefresh={() => FetchPhotosPublic(setPageData)}
+            refreshing={loading}
           />
         )
       case CategoryType.Hidden:
         return (
           <TimelineList
-            data={albumHidden}
-            onRefresh={() => dispatch(FetchHidden.action())}
-            refreshing={albums.loading}
+            data={PhotosHidden}
+            onRefresh={() => FetchPhotosHidden(setPageData)}
+            refreshing={loading}
           />
         )
     }
@@ -152,7 +172,7 @@ const GalleryContainer = () => {
             style={[Common.backgroundDefault]}
           >
             {Object.values(CategoryType).map((buttonCategory, index) =>
-              renderButton(index, buttonCategory),
+              renderButton(index + '', buttonCategory),
             )}
           </HStack>
         </ScrollView>

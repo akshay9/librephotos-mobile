@@ -11,9 +11,9 @@ import { useTheme } from '@/Theme'
 import { NoResultsError } from '.'
 import ImageGrid, { ImageType } from './ImageGrid'
 
-interface TimelineListItemType extends SectionListData<ImageType> {
+export interface TimelineListItemType extends SectionListData<ImageType> {
   title: string
-  name: string
+  name?: string
   data: ImageType[]
 }
 
@@ -24,7 +24,7 @@ type Props = {
 }
 
 const TimelineList = ({
-  data,
+  data = [],
   onRefresh = () => {},
   refreshing = false,
 }: Props) => {
